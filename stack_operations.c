@@ -51,24 +51,24 @@ int		operate1(char *operation, t_stack *a, t_stack *b)
 {
 	if ((ft_strequ("rr", operation)))
 	{
-		stack_rotate(a, 1);
-		stack_rotate(b, 1);
+		stack_rotate(a, 0);
+		stack_rotate(b, 0);
 		return (1);
 	}
 	else if ((ft_strequ("rra", operation)))
 	{
-		stack_rotate(a, 0);
+		stack_rotate(a, 1);
 		return (1);
 	}
 	else if ((ft_strequ("rrb", operation)))
 	{
-		stack_rotate(b, 0);
+		stack_rotate(b, 1);
 		return (1);
 	}
 	else if ((ft_strequ("rrr", operation)))
 	{
-		stack_rotate(a, 0);
-		stack_rotate(b, 0);
+		stack_rotate(a, 1);
+		stack_rotate(b, 1);
 		return (1);
 	}
 	return (0);
@@ -76,6 +76,9 @@ int		operate1(char *operation, t_stack *a, t_stack *b)
 
 int		operate(char *operation, t_stack *a, t_stack *b)
 {
+	printf("%s\n", operation);
+	//if (a->size && b->size)
+	//	printf("a top: %d, b top: %d\n", a->data[a->size - 1], b->data[b->size - 1]);
 	if (ft_strequ("sa", operation))
 		return (stack_swap(a));
 	else if (ft_strequ("sb", operation))
@@ -88,12 +91,12 @@ int		operate(char *operation, t_stack *a, t_stack *b)
 		return(stack_push(a, b));
 	else if ((ft_strequ("ra", operation)))
 	{
-		stack_rotate(a, 1);
+		stack_rotate(a, 0);
 		return (1);
 	}
 	else if ((ft_strequ("rb", operation)))
 	{
-		stack_rotate(b, 1);
+		stack_rotate(b, 0);
 		return (1);
 	}
 	else
