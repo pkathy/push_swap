@@ -66,7 +66,8 @@ int	stack_resize(t_stack *stack, size_t size)
 
 	if (size <= 0)
 	{
-		free(stack->data);
+		if(stack->data)
+			free(stack->data);
 		stack->data = 0;
 		stack->size = 0;
 		return (1);
@@ -74,7 +75,8 @@ int	stack_resize(t_stack *stack, size_t size)
 	if (!(tmp = ft_memalloc(size * sizeof(int))))
 		return (0);
 	ft_memmove(tmp, stack->data, sizeof(int) * (stack->size > size ? size : stack->size));
-	free(stack->data);
+	if (stack->data)
+		free(stack->data);
 	stack->data = tmp;
 	stack->size = size;
 	return (1);

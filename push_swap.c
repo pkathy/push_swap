@@ -28,10 +28,38 @@ int part_size1(t_stacks *s, char stack_name)
 	return (-1);
 }
 
+int	sort_median(t_stack *s, int part_size)
+{
+	int *num = s->data;
+
+	for (int i = s->size - part_size; i < s->size - 1; i++)
+	{
+		for (int j = (s->size - 1); j > i; j--)
+		{
+			if (num[j - 1] < num[j])
+			{
+				int temp = num[j - 1];
+				num[j - 1] = num[j];
+				num[j] = temp;
+			}
+		}
+	}
+}
+
+int get_median(t_stack *s, int part_size)
+{
+	if (s->size)
+		sort_median(s, part_size);
+	return (!(s->size) ? 0 : s->data[part_size/2]);
+}
+
 int get_pivot1(t_stacks *s, char stack_name)
 {
 	int pivot;
 	int i;
+	t_stack median;
+
+	stack_from_source(&median, 0, 0);
 
 	pivot = 0;
 	i = stack_name == 'a' ? s->a->size : s->b->size;
@@ -40,16 +68,17 @@ int get_pivot1(t_stacks *s, char stack_name)
 		{
 			if (s->a_parts->size && s->a->data[i] == stack_peek(s->a_parts))
 				break;
-			pivot += s->a->data[i];
+			t_stack_push(&median, s->a->data[i]);
+			//pivot += s->a->data[i];
 		}
 	if (stack_name == 'b')
 		while (--i >= 0)
 		{
-			pivot += s->b->data[i];
+			t_stack_push(&median, s->b->data[i]);
 			if (s->b_parts->size && s->b->data[i] == stack_peek(s->b_parts))
 				break;
 		}
-	return (pivot/part_size1(s, stack_name));
+	return (get_median(&median, part_size1(s, stack_name)));
 }
 
 int find_possible_partition(t_stacks *s, t_data *data, int pivot)
@@ -92,6 +121,7 @@ int is_there_to_push(t_stacks *s, int pivot, char stack)
 			return (0);
 	}
 }
+
 int push_to_b1(t_stacks *s, t_data *data, int pivot)
 {
 	int	r_count;
@@ -137,19 +167,53 @@ int push_to_b1(t_stacks *s, t_data *data, int pivot)
 		stack_pop(s->a_parts);
 }
 
+int reverse_sort(t_stack *s, int part_size)
+{
+	int *num = s->data;
+	static int c;
+	if (part_size == 3)
+		c+=3;
+	else if (part_size == 2)
+		c+=1;
+
+	for (int i = s->size - part_size; i < s->size - 1; i++)
+	{
+		for (int j = (s->size - 1); j > i; j--)
+		{
+			if (num[j - 1] > num[j])
+			{
+				int temp = num[j - 1];
+				num[j - 1] = num[j];
+				num[j] = temp;
+			}
+		}
+	}
+	printf("%s: %d\n", ">>reverse sorted<<\n", c);
+}
 int	push_to_a1(t_stacks *s, t_data *data, int pivot)
 {
 	int r_count;
 	int stop;
 	int possible_partition;
+	int b_part_size;
 
 	if (!s->b->size)
 		return (0);
+	if (s->a->size)
+		t_stack_push(s->a_parts, stack_peek(s->a));
+	if (s->b->size && (b_part_size = part_size1(s, 'b')) <= 3)
+	{
+		reverse_sort(s->b, b_part_size);
+		if (s->a->size)
+			t_stack_push(s->a_parts, stack_peek(s->a));
+		while (b_part_size-- > 0)
+			operate("pa", s->a, s->b);
+		stack_pop(s->b_parts);
+		return (1);
+	}
 	stop = s->b_parts->size ? stack_peek(s->b_parts) : s->b->data[0];
 	possible_partition = find_possible_partition(s, data, pivot);
 	r_count = 0;
-	if (s->a->size)
-		t_stack_push(s->a_parts, stack_peek(s->a));
 	while (s->b->size > 0 && stack_peek(s->b) != stop)
 	{
 		if (stack_peek(s->b) >= pivot)
@@ -205,17 +269,15 @@ int	is_sorted(t_stack *s)
 	return (1);
 }
 
+
 int	sort_three(t_stack *s, int part_size)
 {
-	int i;
-	int j;
-	int tmp;
 	int *num = s->data;
 	static int c;
-	c++;
-
-	i = s->size - part_size;
-	j = i + 1;
+	if ( part_size == 3)
+		c+= 4;
+	else if ( part_size == 2)
+		c+=1;
 
 	for (int i = s->size - part_size; i < s->size - 1; i++)
 	{
@@ -229,10 +291,8 @@ int	sort_three(t_stack *s, int part_size)
 			}
 		}
 	}
-
 	printf("%s: %d\n", ">>sorted<<\n", c);
 }
-
 int is_in_stack(t_stack *s, int k)
 {
 	int i;
@@ -247,12 +307,13 @@ int is_in_stack(t_stack *s, int k)
 int test_sort(t_stacks *s)
 {
 	int part_size;
+	int b_part_size;
 	int sorted;
 	t_data data;
 
 	while (!(sorted = is_sorted(s->a)) || (s->b->size))
 	{
-		if ((part_size = part_size1(s, 'a')) <0)
+		if ((part_size = part_size1(s, 'a')) < 0)
 		{
 			stack_pop(s->a_parts);
 			continue ;
@@ -288,6 +349,8 @@ int	main(int argc, char **argv)
 	t_stack a_parts;
 	t_stacks s;
 	t_data	data;
+	t_stack test1;
+	t_stack test2;
 	char *line;
 
 	if (argc < 2)
@@ -297,21 +360,16 @@ int	main(int argc, char **argv)
 	stack_from_source(&b_parts, 0, 0);
 	stack_from_source(&a_parts, 0, 0);
 
-	s.a = &a;
 	s.b = &b;
 	s.a_parts = &a_parts;
 	s.b_parts = &b_parts;
-	data.is_b_parted = 0;
-	data.is_a_parted = 0;
-	data.level = 0;
-
 	s.a = &a;
-	s.b = &b;
 
 	//data.next_part_b = find_first_partition(s.a, get_pivot1(&s,'a'));
 	for (int i = 0; i < a.size; ++i)
 		printf("%d ", a.data[i]);
 	printf("\n");
+	//printf("median: %d\n", get_median(&a, part_size1(&s, 'a')));
 	test_sort(&s);
 	printf("a size: %ld\n", a.size);
 	for (int i = 0; i < a.size; ++i)
