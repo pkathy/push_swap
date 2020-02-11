@@ -76,7 +76,7 @@ int		operate1(char *operation, t_stack *a, t_stack *b)
 
 int		operate(char *operation, t_stack *a, t_stack *b)
 {
-	printf("%s\n", operation);
+	//printf("%s\n", operation);
 	//if (a->size && b->size)
 	//	printf("a top: %d, b top: %d\n", a->data[a->size - 1], b->data[b->size - 1]);
 	if (ft_strequ("sa", operation))

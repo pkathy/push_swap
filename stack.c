@@ -79,3 +79,28 @@ int	stack_resize(t_stack *stack, size_t size)
 	stack->size = size;
 	return (1);
 }
+
+int stack_pop(t_stack *stack)
+{
+	int ret;
+	if (stack->size == 0)
+		return (0);
+	ret = stack->data[stack->size];
+	stack_resize(stack, stack->size - 1);
+	return (ret);
+}
+
+int stack_peek(t_stack *stack)
+{
+	if (stack->size == 0)
+		return (0);
+	return (stack->data[stack->size - 1]);
+}
+
+int t_stack_push(t_stack *stack, int data)
+{
+	stack_resize(stack, stack->size + 1);
+	stack->data[stack->size - 1] = data;
+
+	return (1);
+}
