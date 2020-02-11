@@ -1,32 +1,5 @@
 #include "push_swap.h"
 
-
-//part size or stack size if there is no parts
-/*int	partition_size(t_stacks *s, t_data *data, char stack_name) {
-	int i;
-	if (stack_name == 'a' && !(data->is_a_parted))
-		return (s->a->size);
-	if (stack_name == 'b' && !(data->is_b_parted))
-		return (s->b->size);
-	if (stack_name == 'a')
-	{
-		i = s->a->size;
-		while (--i >= 0)
-			if (s->a->data[i] == data->next_part_a)
-				return (s->a->size - i);
-	}
-	else
-	{
-		i = s->b->size;
-		while (--i >= 0)
-		{
-			if (s->b->data[i] == data->next_part_b)
-				return (s->b->size - i);
-		}
-	}
-	return (-1);
-}*/
-
 int part_size1(t_stacks *s, char stack_name)
 {
 	int stop;
@@ -54,35 +27,6 @@ int part_size1(t_stacks *s, char stack_name)
 	}
 	return (-1);
 }
-
-/*int	get_pivot(t_stacks *s, t_data *data, char stack_name)
-{
-	int	pivot;
-	int i;
-
-	pivot = 0;
-	if (i = stack_name == 'a')
-	{
-		i = s->a->size;
-		while (--i >= 0)
-		{
-			pivot += s->a->data[i];
-			if (data->is_a_parted && s->a->data[i] == data->next_part_a)
-				break;
-		}
-	}
-	else
-	{
-		i = s->b->size;
-		while (--i >= 0)
-		{
-			pivot += s->b->data[i];
-			if (data->is_b_parted && s->b->data[i] == data->next_part_b)
-				break;
-		}
-	}
-	return (pivot/partition_size(s, data, stack_name));
-}*/
 
 int get_pivot1(t_stacks *s, char stack_name)
 {
@@ -126,7 +70,28 @@ int find_possible_partition(t_stacks *s, t_data *data, int pivot)
 	data->error = 1;
 	return (-1);
 }
-
+int is_there_to_push(t_stacks *s, int pivot, char stack)
+{
+	if (stack == 'b')
+	{
+		int part_size = part_size1(s, 'b');
+		int flag = 0;
+		for (int k = s->b->size - part_size; k < s->b->size; ++k)
+			if (s->b->data[k] >= pivot)
+				flag = 1;
+		if (flag == 0)
+			return (0);
+	} else
+	{
+		int part_size = part_size1(s, 'a');
+		int flag = 0;
+		for (int k = s->a->size - part_size; k < s->a->size; ++k)
+			if (s->a->data[k] <= pivot)
+				flag = 1;
+		if (flag == 0)
+			return (0);
+	}
+}
 int push_to_b1(t_stacks *s, t_data *data, int pivot)
 {
 	int	r_count;
@@ -147,6 +112,8 @@ int push_to_b1(t_stacks *s, t_data *data, int pivot)
 			}
 			operate("pb", s->a, s->b);
 		}
+		if (!is_there_to_push(s, pivot, 'a'))
+			break ;
 		if (s->a->data[s->a->size - 1] > pivot)
 		{
 			if (stack_peek(s->a) == stop)
@@ -157,8 +124,15 @@ int push_to_b1(t_stacks *s, t_data *data, int pivot)
 	}
 	if (stack_peek(s->a) <= pivot)
 		operate("pb", s->a, s->b);
-	while (r_count-- > 0)
-		operate("rra", s->a, s->b);
+	if (s->a->size - r_count < s->a->size/2)
+		while (s->a->size - r_count > 0)
+		{
+			operate("ra", s->a, s->b);
+			r_count++;
+		}
+	else
+		while (r_count-- > 0)
+			operate("rra", s->a, s->b);
 	if (s->a->size > 0 && !is_in_stack(s->a, stack_peek(s->a_parts)))
 		stack_pop(s->a_parts);
 }
@@ -180,6 +154,8 @@ int	push_to_a1(t_stacks *s, t_data *data, int pivot)
 	{
 		if (stack_peek(s->b) >= pivot)
 			operate("pa", s->a, s->b);
+		if (!is_there_to_push(s, pivot, 'b'))
+			break ;
 		if (s->b->size > 0 && stack_peek(s->b) < pivot)
 		{
 			operate("rb", s->a, s->b);
@@ -188,8 +164,15 @@ int	push_to_a1(t_stacks *s, t_data *data, int pivot)
 	}
 	if (s->b->size > 0 && stack_peek(s->b) >= pivot)
 		operate("pa", s->a, s->b);
-	while (r_count-- > 0 && s->b->size > 0)
-		operate("rrb", s->a, s->b);
+	if (s->b->size - r_count < s->b->size/2)
+		while (s->b->size - r_count > 0 && s->b->size > 0)
+		{
+			operate("rb", s->a, s->b);
+			r_count++;
+		}
+	else
+		while (r_count-- > 0 && s->b->size > 0)
+			operate("rrb", s->a, s->b);
 	if (s->b->size > 0 && !is_in_stack(s->b, stack_peek(s->b_parts)))
 		stack_pop(s->b_parts);
 	if (!(data->error) && s->b->size > 0)
@@ -228,6 +211,8 @@ int	sort_three(t_stack *s, int part_size)
 	int j;
 	int tmp;
 	int *num = s->data;
+	static int c;
+	c++;
 
 	i = s->size - part_size;
 	j = i + 1;
@@ -245,7 +230,7 @@ int	sort_three(t_stack *s, int part_size)
 		}
 	}
 
-	printf(">>sorted<<\n");
+	printf("%s: %d\n", ">>sorted<<\n", c);
 }
 
 int is_in_stack(t_stack *s, int k)
@@ -265,7 +250,6 @@ int test_sort(t_stacks *s)
 	int sorted;
 	t_data data;
 
-	int pivot;
 	while (!(sorted = is_sorted(s->a)) || (s->b->size))
 	{
 		if ((part_size = part_size1(s, 'a')) <0)
@@ -287,15 +271,11 @@ int test_sort(t_stacks *s)
 		}
 		if (!sorted)
 		{
-			pivot = get_pivot1(s, 'a');
 			divide1(s, &data, 'a', get_pivot1(s, 'a'));
 			continue ;
 		}
 		if (s->b->size)
-		{
-			pivot = get_pivot1(s, 'b');
 			divide1(s, &data, 'b', get_pivot1(s, 'b'));
-		}
 	}
 }
 
