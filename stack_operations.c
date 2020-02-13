@@ -79,6 +79,8 @@ int		operate(char *operation, t_stack *a, t_stack *b)
 	static int c;
 	//if (!ft_strequ(operation, "rrb"))
 	c++;
+	if (c == 720)
+		c = 720;
 	printf("%s, %d\n", operation, c);
 	//if (a->size && b->size)
 	//	printf("a top: %d, b top: %d\n", a->data[a->size - 1], b->data[b->size - 1]);

@@ -55,13 +55,10 @@ int get_median(t_stack *s, int part_size)
 
 int get_pivot1(t_stacks *s, char stack_name)
 {
-	int pivot;
 	int i;
 	t_stack median;
 
 	stack_from_source(&median, 0, 0);
-
-	pivot = 0;
 	i = stack_name == 'a' ? s->a->size : s->b->size;
 	if (stack_name == 'a')
 		while (--i >= 0)
@@ -69,7 +66,6 @@ int get_pivot1(t_stacks *s, char stack_name)
 			if (s->a_parts->size && s->a->data[i] == stack_peek(s->a_parts))
 				break;
 			t_stack_push(&median, s->a->data[i]);
-			//pivot += s->a->data[i];
 		}
 	if (stack_name == 'b')
 		while (--i >= 0)
@@ -154,15 +150,17 @@ int push_to_b1(t_stacks *s, t_data *data, int pivot)
 	}
 	if (stack_peek(s->a) <= pivot)
 		operate("pb", s->a, s->b);
-	if (s->a->size - r_count < s->a->size/2)
-		while (s->a->size - r_count > 0)
-		{
-			operate("ra", s->a, s->b);
-			r_count++;
-		}
-	else
-		while (r_count-- > 0)
-			operate("rra", s->a, s->b);
+	if (s->a_parts->size != 0)
+	{
+		if (s->a->size - r_count < s->a->size / 2)
+			while (s->a->size - r_count > 0) {
+				operate("ra", s->a, s->b);
+				r_count++;
+			}
+		else
+			while (r_count-- > 0)
+				operate("rra", s->a, s->b);
+	}
 	if (s->a->size > 0 && !is_in_stack(s->a, stack_peek(s->a_parts)))
 		stack_pop(s->a_parts);
 }
@@ -190,6 +188,131 @@ int reverse_sort(t_stack *s, int part_size)
 	}
 	printf("%s: %d\n", ">>reverse sorted<<\n", c);
 }
+
+int sort_3_b1(t_stacks *s, int bs, int *arr)
+{
+	if (arr[bs - 3] > arr[bs - 2] && arr[bs - 2] > arr[bs - 1])
+	{
+		operate("rb", s->a, s->b);
+		operate("sb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("rrb", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (arr[bs - 1] > arr[bs - 2] && arr[bs - 2] > arr[bs - 3])
+	{
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (arr[bs - 2] > arr[bs - 3] && arr[bs - 3] > arr[bs - 1])
+	{
+		operate("rb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("rrb", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (arr[bs - 1] > arr[bs - 3] && arr[bs - 3] > arr[bs - 2])
+	{
+		operate("pa", s->a, s->b);
+		operate("sb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (arr[bs - 3] > arr[bs - 1] && arr[bs - 1] > arr[bs - 2])
+	{
+		operate("rb", s->a, s->b);
+		operate("sb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("rrb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (arr[bs - 2] > arr[bs - 1] && arr[bs - 1] > arr[bs - 3])
+	{
+		operate("sb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	return (0);
+}
+
+int sort_3_b(t_stacks *s, int part_size)
+{
+	if (part_size <= 0)
+		return (0);
+	if (part_size == 1)
+		operate("pa", s->a, s->b);
+	if (part_size == 2 && stack_peek(s->b) <= s->b->data[s->b->size - 2])
+	{
+		operate("sb", s->a, s->b);
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	else if (part_size == 2 && stack_peek(s->b) > s->b->data[s->b->size - 2])
+	{
+		operate("pa", s->a, s->b);
+		operate("pa", s->a, s->b);
+	}
+	if (part_size == 3)
+		return (sort_3_b1(s, s->b->size, s->b->data));
+	return (0);
+}
+
+int sort_3_a1(t_stacks *s, int as, int *arr)
+{
+	if (arr[as - 3] < arr[as - 2] && arr[as - 2] < arr[as - 1])
+	{
+		operate("sa", s->a, s->b);
+		operate("ra", s->a, s->b);
+		operate("sa", s->a, s->b);
+		operate("rra", s->a, s->b);
+		operate("sa", s->a, s->b);
+	}
+	else if (arr[as - 1] < arr[as - 2] && arr[as - 2] < arr[as - 3])
+	{
+		return (0);
+	}
+	else if (arr[as - 3] < arr[as - 1] && arr[as - 1] < arr[as - 2])
+	{
+		operate("ra", s->a, s->b);
+		operate("sa", s->a, s->b);
+		operate("rra", s->a, s->b);
+		operate("sa", s->a, s->b);
+	}
+	else if (arr[as - 2] < arr[as - 1] && arr[as - 1] < arr[as - 3])
+	{
+		operate("sa", s->a, s->b);
+	}
+	else if (arr[as - 2] < arr[as - 3] && arr[as - 3] < arr[as - 1])
+	{
+		operate("sa", s->a, s->b);
+		operate("ra", s->a, s->b);
+		operate("sa", s->a, s->b);
+		operate("rra", s->a, s->b);
+	}
+	else if (arr[as - 1] < arr[as - 3] && arr[as - 3] < arr[as - 2])
+	{
+		operate("ra", s->a, s->b);
+		operate("sa", s->a, s->b);
+		operate("rra", s->a, s->b);
+	}
+	return (0);
+}
+
+int sort_3_a(t_stacks *s, int part_size)
+{
+	if (part_size <= 1)
+		return (0);
+	if (part_size == 2 && stack_peek(s->a) > s->a->data[s->a->size - 2])
+		operate("sa", s->a, s->b);
+	if (part_size == 3)
+		return (sort_3_a1(s, s->a->size, s->a->data));
+	return (0);
+}
 int	push_to_a1(t_stacks *s, t_data *data, int pivot)
 {
 	int r_count;
@@ -199,18 +322,16 @@ int	push_to_a1(t_stacks *s, t_data *data, int pivot)
 
 	if (!s->b->size)
 		return (0);
-	if (s->a->size)
-		t_stack_push(s->a_parts, stack_peek(s->a));
 	if (s->b->size && (b_part_size = part_size1(s, 'b')) <= 3)
 	{
-		reverse_sort(s->b, b_part_size);
+		sort_3_b(s, b_part_size);
+		stack_pop(s->b_parts);
 		if (s->a->size)
 			t_stack_push(s->a_parts, stack_peek(s->a));
-		while (b_part_size-- > 0)
-			operate("pa", s->a, s->b);
-		stack_pop(s->b_parts);
 		return (1);
 	}
+	if (s->a->size)
+		t_stack_push(s->a_parts, stack_peek(s->a));
 	stop = s->b_parts->size ? stack_peek(s->b_parts) : s->b->data[0];
 	possible_partition = find_possible_partition(s, data, pivot);
 	r_count = 0;
@@ -323,10 +444,9 @@ int test_sort(t_stacks *s)
 			stack_pop(s->b_parts);
 			continue ;
 		}
-		if (part_size <= 3)
+		if (part_size <= 3 && !is_sorted(s->a))
 		{
-			if (!sorted)
-				sort_three(s->a, part_size);
+			sort_3_a(s, part_size);
 			t_stack_push(s->a_parts, stack_peek(s->a));
 			sorted = 1;
 		}
