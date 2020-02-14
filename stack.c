@@ -7,6 +7,8 @@ int is_valid(char *str)
 	int c;
 
 	c = 0;
+	if ((*str == '-' || *str == '+') && *(str + 1))
+		str++;
 	while(*str)
 	{
 		if(!ft_isdigit(*str) || c > 10)

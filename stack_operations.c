@@ -47,7 +47,7 @@ void	stack_rotate(t_stack *s, int direction)
 	}
 }
 
-int		operate1(char *operation, t_stack *a, t_stack *b)
+int		operate1(char *operation, t_stack *a, t_stack *b, int mode)
 {
 	if ((ft_strequ("rr", operation)))
 	{
@@ -74,16 +74,22 @@ int		operate1(char *operation, t_stack *a, t_stack *b)
 	return (0);
 }
 
-int		operate(char *operation, t_stack *a, t_stack *b)
+int operate(char *operation, t_stack *a, t_stack *b, int mode)
 {
-	static int c;
-	//if (!ft_strequ(operation, "rrb"))
-	c++;
-	if (c == 720)
-		c = 720;
-	printf("%s, %d\n", operation, c);
-	//if (a->size && b->size)
-	//	printf("a top: %d, b top: %d\n", a->data[a->size - 1], b->data[b->size - 1]);
+	static char str[100000];
+	if (!mode)
+	{
+		printf("%s\n", operation);
+		//ft_strcat(str, operation);
+		//ft_strcat(str, "\n");
+	}
+	if (mode == 3)
+	{
+		//char *t;
+		//t = ft_strrchr(str,'\n');
+		//*t = 0;
+		//printf("%s", str);
+	}
 	if (ft_strequ("sa", operation))
 		return (stack_swap(a));
 	else if (ft_strequ("sb", operation))
@@ -105,5 +111,5 @@ int		operate(char *operation, t_stack *a, t_stack *b)
 		return (1);
 	}
 	else
-		return (operate1(operation, a, b));
+		return (operate1(operation, a, b, mode));
 }

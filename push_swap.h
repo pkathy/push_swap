@@ -31,7 +31,7 @@ int	stack_resize(t_stack *stack, size_t size);
 int stack_pop(t_stack *stack);
 int t_stack_push(t_stack *stack, int data);
 int stack_peek(t_stack *stack);
-int	operate(char *operation, t_stack *a, t_stack *b);
+int operate(char *operation, t_stack *a, t_stack *b, int mode);
 int	get_pivot(t_stacks *s, t_data *data, char stack_name);
 int is_in_stack(t_stack *s, int k);
 #endif
