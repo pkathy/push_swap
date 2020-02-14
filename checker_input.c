@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 		return (1);
 	if (!stack_from_source(&a, ++argv, argc - 1)) {
 		printf("Error\n");
+		free(a.data);
 		return (0);
 	}
 	stack_from_source(&b, 0, 0);
@@ -42,5 +43,7 @@ int main(int argc, char **argv)
 		printf("OK\n");
 	else
 		printf("KO\n");
+	free(a.data);
+	free(b.data);
 	return (0);
 }

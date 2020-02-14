@@ -15,14 +15,11 @@ typedef struct	s_two {
 }				t_stacks;
 
 typedef struct	s_data {
-	int	next_part_a;
-	int	is_a_parted;
-	int	next_part_b;
-	int is_b_parted;
+
 	int b_first;
-	int a_first;
 	int error;
-	int level;
+	int stop;
+	int bps;
 }				t_data;
 
 int	stack_push(t_stack *from, t_stack *to);
@@ -32,6 +29,5 @@ int stack_pop(t_stack *stack);
 int t_stack_push(t_stack *stack, int data);
 int stack_peek(t_stack *stack);
 int operate(char *operation, t_stack *a, t_stack *b, int mode);
-int	get_pivot(t_stacks *s, t_data *data, char stack_name);
 int is_in_stack(t_stack *s, int k);
 #endif

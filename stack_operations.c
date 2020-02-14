@@ -76,20 +76,8 @@ int		operate1(char *operation, t_stack *a, t_stack *b, int mode)
 
 int operate(char *operation, t_stack *a, t_stack *b, int mode)
 {
-	static char str[100000];
 	if (!mode)
-	{
 		printf("%s\n", operation);
-		//ft_strcat(str, operation);
-		//ft_strcat(str, "\n");
-	}
-	if (mode == 3)
-	{
-		//char *t;
-		//t = ft_strrchr(str,'\n');
-		//*t = 0;
-		//printf("%s", str);
-	}
 	if (ft_strequ("sa", operation))
 		return (stack_swap(a));
 	else if (ft_strequ("sb", operation))
