@@ -78,7 +78,9 @@ int	stack_resize(t_stack *stack, size_t size)
 		return (0);
 	ft_memmove(tmp, stack->data, sizeof(int) * (stack->size > size ? size : stack->size));
 	if (stack->data)
+	{
 		free(stack->data);
+	}
 	stack->data = tmp;
 	stack->size = size;
 	return (1);
@@ -89,7 +91,7 @@ int stack_pop(t_stack *stack)
 	int ret;
 	if (stack->size == 0)
 		return (0);
-	ret = stack->data[stack->size];
+	ret = stack->data[stack->size - 1];
 	stack_resize(stack, stack->size - 1);
 	return (ret);
 }
