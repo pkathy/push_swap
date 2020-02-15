@@ -3,8 +3,7 @@
 
 static int	is_sorted(t_stack *s)
 {
-	int tmp;
-	int	i;
+	size_t	i;
 
 	i = -1;
 	while (++i < s->size - 1)
@@ -31,12 +30,6 @@ int main(int argc, char **argv)
 	{
 		if (!operate(line, &a, &b, 1))
 			write(2, "Error\n", 6);
-		for (int i = 0; i < a.size; ++i)
-			printf("%d ", a.data[i]);
-		printf("      ");
-		for (int i = 0; i < b.size; ++i)
-			printf("%d ", b.data[i]);
-		printf("\n");
 		free(line);
 	}
 	if (is_sorted(&a) && b.size == 0)

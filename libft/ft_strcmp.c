@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/05 21:27:50 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/08 14:45:01 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/09 17:24:47 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/07 19:40:24 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int	ft_strcmp(const char *s1, const char *s2)
+int		ft_strcmp(const char *s1, const char *s2)
 {
-	size_t size1;
-	size_t size2;
+	int				s;
+	unsigned char	*ts1;
+	unsigned char	*ts2;
 
-	size1 = ft_strlen(s1) + 1;
-	size2 = ft_strlen(s2) + 1;
-	return (ft_memcmp(s1, s2, size1 > size2 ? size1 : size2));
+	ts1 = (unsigned char *)s1;
+	ts2 = (unsigned char *)s2;
+	s = 0;
+	while (*ts1 != 0 && *ts2 != 0 && *ts1 == *ts2)
+		s += *ts1++ - *ts2++;
+	s += *ts1 - *ts2;
+	return (s);
 }

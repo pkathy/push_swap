@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstfind.c                                       :+:      :+:    :+:   */
+/*   ft_list_size.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/12 19:26:46 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/12 20:40:03 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/17 18:32:26 by pkathy            #+#    #+#             */
+/*   Updated: 2019/07/17 18:39:13 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstfind(t_list **alst, void const *content, size_t content_size)
+int		ft_list_size(t_list *begin_list)
 {
-	t_list	*node;
-
-	node = NULL;
-	if (alst)
-	{
-		node = *alst;
-		while (node && ft_memcmp(node->content, content, content_size))
-			node = node->next;
-	}
-	return (node ? node : NULL);
+	if (!begin_list)
+		return (0);
+	return (1 + ft_list_size(begin_list->next));
 }

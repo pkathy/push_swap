@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstaddend.c                                     :+:      :+:    :+:   */
+/*   ft_strupcase.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/12 19:23:08 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/12 19:26:30 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/09 18:07:42 by pkathy            #+#    #+#             */
+/*   Updated: 2019/07/09 18:43:26 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	ft_lstaddend(t_list **alst, t_list *new)
+char	*ft_strupcase(char *str)
 {
-	t_list	*node;
+	char *tmp;
 
-	if (alst && new)
+	tmp = str;
+	while (*str != '\0')
 	{
-		node = *alst;
-		while (node->next)
-			node = node->next;
-		node->next = new;
-		new->next = NULL;
+		if (*str >= 'a' && *str <= 'z')
+			*str -= 'a' - 'A';
+		str++;
 	}
+	return (tmp);
 }

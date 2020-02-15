@@ -3,35 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/06 21:06:52 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/13 21:13:41 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/08 15:28:34 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/13 20:41:58 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int			ft_atoi(const char *str)
+static int		is_space(char c)
 {
-	long long	res;
-	size_t		b;
+	if (c == '\n' || c == '\t'
+	|| c == '\v' || c == '\f' || c == '\r' || c == ' ')
+		return (1);
+	else
+		return (0);
+}
 
-	b = 0;
-	res = 0;
-	while (*str == ' ' || *str == '\n' || *str == '\t' ||
-			*str == '\v' || *str == '\f' || *str == '\r')
+static int		is_digit(char ch)
+{
+	if (ch >= '0' && ch <= '9')
+		return (1);
+	return (0);
+}
+
+int				ft_atoi(const char *str)
+{
+	int				sign;
+	long long		n;
+
+	n = 0;
+	sign = 0;
+	while (is_space(*str))
 		str++;
-	if (*str == '-')
-		b = 1;
-	if (*str == '+' || *str == '-')
-		str++;
-	while (*str >= '0' && *str <= '9')
+	if (*str == '-' || *str == '+')
 	{
-		res = res * 10 + (*str - '0');
-		if (res * 1000 < res)
-			return (b ? 0 : -1);
+		if (*str == '-')
+			sign = 1;
 		str++;
 	}
-	return (b ? (int)-res : (int)res);
+	while (is_digit(*str))
+	{
+		n = n * 10 + *str++ - '0';
+		if (n * 1000 < n)
+			return (sign ? 0 : -1);
+	}
+	if (sign)
+		return (n >= 0 ? -n : 0);
+	return (n >= 0 ? n : -1);
 }

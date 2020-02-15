@@ -47,7 +47,7 @@ void	stack_rotate(t_stack *s, int direction)
 	}
 }
 
-int		operate1(char *operation, t_stack *a, t_stack *b, int mode)
+int		operate1(char *operation, t_stack *a, t_stack *b)
 {
 	if ((ft_strequ("rr", operation)))
 	{
@@ -99,5 +99,5 @@ int operate(char *operation, t_stack *a, t_stack *b, int mode)
 		return (1);
 	}
 	else
-		return (operate1(operation, a, b, mode));
+		return (operate1(operation, a, b));
 }

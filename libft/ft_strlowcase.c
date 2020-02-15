@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memdup.c                                        :+:      :+:    :+:   */
+/*   ft_strlowcase.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/13 19:57:42 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/13 20:15:20 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/09 18:44:48 by pkathy            #+#    #+#             */
+/*   Updated: 2019/07/09 18:49:51 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-void	*ft_memdup(const void *src, size_t size)
+char	*ft_strlowcase(char *str)
 {
-	void *res;
+	char *tmp;
 
-	if (!(res = ft_memalloc(size)))
+	tmp = str;
+	while (*str != '\0')
 	{
-		res = NULL;
-		return (NULL);
+		if (*str >= 'A' && *str <= 'Z')
+			*str += 'a' - 'A';
+		str++;
 	}
-	ft_memcpy(res, src, size);
-	return (res);
+	return (tmp);
 }

@@ -3,26 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/05 21:43:17 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/08 15:43:20 by swynona          ###   ########.fr       */
+/*   Created: 2019/07/09 17:59:57 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/14 17:11:47 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	i;
+	unsigned char	*ts1;
+	unsigned char	*ts2;
 
-	if (n == 0)
+	if (!n)
 		return (0);
-	i = 0;
-	while (s1[i] && s2[i] && (unsigned char)s1[i] == (unsigned char)s2[i]
-			&& i < n)
-		i++;
-	if (i == n)
-		i--;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	ts1 = (unsigned char *)s1;
+	ts2 = (unsigned char *)s2;
+	while (*ts1 != 0 && *ts2 != 0 && *ts1 == *ts2 && --n)
+	{
+		if (*ts1 != *ts2)
+			return (*ts1 - *ts2);
+		ts1++;
+		ts2++;
+	}
+	return (*ts1 - *ts2);
 }

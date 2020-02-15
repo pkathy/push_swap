@@ -3,87 +3,101 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 20:50:01 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/13 18:15:01 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/08 20:04:07 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/09 22:27:00 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_split_skip(char const *s, char c, size_t i)
-{
-	while (s[i] && s[i] == c)
-		i++;
-	return (i);
-}
-
-static size_t	ft_non_split_skip(char const *s, char c, size_t i)
-{
-	while (s[i] && s[i] != c)
-		i++;
-	return (i);
-}
-
-static size_t	ft_word_count(char const *s, char c)
+static char		*safe_str_alloc(char **dict, size_t wc, size_t size)
 {
 	size_t	i;
-	size_t	count;
+	char	*str;
 
-	i = 0;
-	count = 0;
-	while (s[i])
+	str = (char *)ft_memalloc(sizeof(char) * (size));
+	if (!str)
 	{
-		i = ft_split_skip(s, c, i);
-		if (s[i] && ++count)
-			i = ft_non_split_skip(s, c, i);
+		i = 0;
+		while (i < wc)
+		{
+			free(dict[i]);
+			i++;
+		}
+		return (NULL);
 	}
-	return (count + 1);
+	return (str);
 }
 
-static void		*ft_del(char **s, size_t n, size_t inside)
+static size_t	skip_space(size_t start, char const *str, char space)
+{
+	size_t i;
+
+	i = start;
+	while (str[i] == space && str[i])
+		i++;
+	return (i);
+}
+
+static size_t	skip_word(size_t start, char const *str, char space)
+{
+	size_t i;
+
+	i = start;
+	while (!(str[i] == space) && str[i] != '\0')
+		i++;
+	return (i);
+}
+
+static char		**arr_alloc(char const *str, char c)
 {
 	size_t	i;
 	size_t	j;
+	char	**arr;
+	int		wc;
 
-	i = 0;
-	if (inside)
+	wc = 0;
+	i = skip_space(0, str, c);
+	while (str[i])
 	{
-		while (i < n)
-		{
-			j = 0;
-			while (s[i][j])
-				s[i][j] = 0;
-			free(s[i]);
-			s[i] = NULL;
-		}
+		j = skip_space(i, str, c);
+		i = skip_word(i, str, c);
+		if (j != i)
+			wc++;
+		i = skip_space(i, str, c);
 	}
-	free(s);
-	s = NULL;
-	return (NULL);
+	arr = (char **)ft_memalloc((wc + 1) * sizeof(char *));
+	if (!arr)
+		return (NULL);
+	arr[wc] = 0;
+	return (arr);
 }
 
 char			**ft_strsplit(char const *s, char c)
 {
-	char	**res;
 	size_t	i;
 	size_t	j;
 	size_t	k;
+	size_t	wc;
+	char	**str_arr;
 
-	if (!s)
+	if (!s || !(str_arr = arr_alloc(s, c)))
 		return (NULL);
-	k = 0;
-	if (!(res = (char **)ft_memalloc(ft_word_count(s, c) * sizeof(char *))))
-		return (ft_del(res, 1, 0));
-	j = 0;
-	while (s[i = ft_split_skip(s, c, j)])
+	i = skip_space(0, s, c);
+	wc = 0;
+	while (s[i] && (j = i) == i)
 	{
-		j = ft_non_split_skip(s, c, i);
-		if (!(res[k] = (char *)ft_memalloc((j - i + 1) * sizeof(char))))
-			return (ft_del(res, k, 1));
-		res[k] = ft_strncpy(res[k], s + i, j - i);
-		k++;
+		k = 0;
+		i = skip_word(i, s, c);
+		i = skip_space(i, s, c);
+		if (!(str_arr[wc] = safe_str_alloc(str_arr, wc, i - j + 1)))
+			return (NULL);
+		str_arr[wc][i - j] = 0;
+		while (s[j] != c && s[j])
+			str_arr[wc][k++] = s[j++];
+		wc++;
 	}
-	return (res);
+	return (str_arr);
 }

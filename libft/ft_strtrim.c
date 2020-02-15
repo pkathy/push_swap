@@ -3,39 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/07 20:11:24 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/07 20:41:38 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/08 19:13:32 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/08 19:58:58 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strtrim(char const *s)
+static int		is_space(char c)
 {
-	char	*res;
-	size_t	i;
-	size_t	l;
-	size_t	j;
+	return (c == ' ' || c == '\n' || c == '\t');
+}
 
-	i = 0;
-	j = 0;
+static size_t	skip_space(char *str, char direction, size_t start, size_t end)
+{
+	size_t i;
+
+	i = start;
+	if (direction)
+		while (is_space(str[i]) && i < end)
+			i++;
+	else
+		while (is_space(str[i]) && i > end)
+			i--;
+	return (i);
+}
+
+char			*ft_strtrim(char const *s)
+{
+	size_t	i;
+	size_t	j;
+	size_t	size;
+	char	*str;
+
 	if (!s)
 		return (NULL);
-	while (s[i] && (s[i] == ' ' || s[i] == '\n' || s[i] == '\t'))
-		i++;
-	l = ft_strlen(s) - 1;
-	while (l != 0 && (s[l] == ' ' || s[l] == '\n' || s[l] == '\t'))
-		l--;
-	if (!(res = (char *)ft_memalloc((l > i ? ++l - i + 1 : 1) *
-			sizeof(char))))
+	size = ft_strlen(s);
+	i = skip_space((char *)s, 1, 0, size);
+	if (i == size)
+		return (ft_strnew(0));
+	j = skip_space((char *)s, 0, size - 1, 0);
+	str = ft_strnew(j - i + 1);
+	if (!str)
 		return (NULL);
-	while (i < l)
-	{
-		res[j] = s[i];
-		j++;
-		i++;
-	}
-	return (res);
+	str = ft_strncpy(str, (char *)&s[i], j - i + 1);
+	return (str);
 }

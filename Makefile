@@ -1,7 +1,7 @@
 NAME2 = push_swap
 NAME1 = checker
 LIBFT = ./libft/libft.a
-FILES2 = push_swap.c
+FILES2 = push_swap.c median.c sort_3_a.c sort_3_b.c divide.c sort.c utils.c
 
 FILES1 = checker_input.c
 
@@ -10,7 +10,7 @@ FILES3 = stack.c stack_operations.c
 OBJ1 = $(patsubst %.c, %.o, $(FILES1))
 OBJ2 = $(patsubst %.c, %.o, $(FILES2))
 OBJ3 = $(patsubst %.c, %.o, $(FILES3))
-CPPFLAGS	=  #-Wall -Werror -Wextra
+CPPFLAGS	=  -Wall -Werror -Wextra
 HEADER		= push_swap.h
 NAME 		= $(NAME1) $(NAME2)
 

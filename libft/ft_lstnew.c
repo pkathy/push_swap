@@ -3,52 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 19:31:38 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/09 19:27:16 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/10 20:31:09 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/10 21:01:30 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	*ft_memdup_loc(const void *src, size_t size)
+t_list	*ft_lstnew(void const *content, size_t content_size)
 {
-	void	*res;
+	t_list	*res;
+	void	*l_content;
 
-	if (!(res = ft_memalloc(size)))
-	{
-		res = NULL;
+	res = (t_list *)ft_memalloc(sizeof(t_list));
+	if (!res)
 		return (NULL);
-	}
-	ft_memcpy(res, src, size);
-	return (res);
-}
-
-t_list		*ft_lstnew(void const *content, size_t content_size)
-{
-	t_list	*node;
-
-	if (!(node = (t_list *)ft_memalloc(sizeof(t_list))))
-	{
-		node = NULL;
-		return (NULL);
-	}
 	if (!content)
 	{
-		node->content = NULL;
-		node->content_size = 0;
+		res->content = NULL;
+		res->content_size = 0;
 	}
 	else
 	{
-		if (!(node->content = ft_memdup_loc(content, content_size)))
+		if (!(l_content = ft_memalloc(content_size)))
 		{
-			free(node);
-			node = NULL;
+			free(l_content);
+			free(res);
 			return (NULL);
 		}
-		node->content_size = content_size;
+		ft_memmove(l_content, content, content_size);
+		res->content = l_content;
+		res->content_size = content_size;
 	}
-	node->next = NULL;
-	return (node);
+	res->next = NULL;
+	return (res);
 }

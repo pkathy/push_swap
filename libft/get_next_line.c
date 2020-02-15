@@ -3,67 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/15 16:48:52 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/16 20:04:35 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/16 20:29:27 by pkathy            #+#    #+#             */
+/*   Updated: 2020/02/15 19:42:44 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "get_next_line.h"
 
-int	make_res(char **str, char **line, int fd, int ret)
+int		read_file(int fd, char **a, char **n)
 {
-	char	*tmp;
-	size_t	len;
+	int		r;
+	char	*temp;
+	char	*buf;
 
-	len = 0;
-	while ((*str)[len] != '\n' && (*str)[len])
-		len++;
-	if ((*str)[len] == '\n')
+	if (!(buf = ft_strnew(BUFF_SIZE)))
+		return (-1);
+	while (!(*n = ft_strchr(*a, '\n')) &&
+	(r = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		*line = ft_strsub(*str, 0, len);
-		tmp = ft_strdup((*str) + len + 1);
-		ft_strdel(&(*str));
-		if (*tmp)
-			*str = tmp;
-		else
-			ft_strdel(&tmp);
+		buf[r] = 0;
+		temp = *a;
+		if (!(*a = ft_strjoin(*a, buf)))
+			return (-1);
+		ft_strdel(&temp);
 	}
-	else if (!(*str)[len])
-	{
-		if (ret == BUFF_SIZE)
-			return (get_next_line(fd, line));
-		*line = ft_strdup(*str);
-		ft_strdel(str);
-	}
-	return (1);
+	ft_strdel(&buf);
+	return (r);
 }
 
-int	get_next_line(const int fd, char **line)
+int		get_next_line(const int fd, char **line)
 {
-	static char		*str[255];
-	char			buf[BUFF_SIZE + 1];
-	char			*tmp;
-	int				ret;
+	static char	*a[10240];
+	int			r;
+	char		*temp;
+	char		*n;
 
-	if (fd < 0 || !line)
+	if (fd < 0 || fd > 10240 || !line || (!a[fd] && !(a[fd] = ft_strnew(1))))
 		return (-1);
-	while ((ret = read(fd, buf, BUFF_SIZE)) > 0)
+	r = read_file(fd, &a[fd], &n);
+	if (r == -1 || !(temp = a[fd]))
+		ft_strdel(&a[fd]);
+	if (r == -1 || !*a[fd])
+		return (r == -1 ? -1 : 0);
+	if (n)
+		*line = ft_strsub(a[fd], 0, n - a[fd]);
+	else
 	{
-		buf[ret] = 0;
-		if (!(str[fd]) && !(str[fd] = ft_strnew(0)))
+		if (!(*line = ft_strdup(a[fd])))
+		{
+			ft_strdel(&a[fd]);
 			return (-1);
-		else if (!(tmp = ft_strjoin(str[fd], buf)))
-			return (-1);
-		ft_strdel(&(str[fd]));
-		str[fd] = tmp;
-		if (ft_strchr(buf, '\n'))
-			break ;
+		}
 	}
-	if (ret < 0)
-		return (-1);
-	else if (ret == 0 && (str[fd] == NULL || str[fd][0] == 0))
-		return (0);
-	return (make_res(&(str[fd]), line, fd, ret));
+	a[fd] = ft_strsub(a[fd], LEN(*line) + R(n), LEN(a[fd]) - LEN(*line) - R(n));
+	ft_strdel(&temp);
+	return (1);
 }

@@ -3,41 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 16:36:49 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/08 17:55:16 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/10 15:36:06 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/10 16:11:32 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_itoa_rec(int n, int size, char sign)
+static int	int_len(long n)
 {
-	unsigned int	num;
-	char			*res;
-	size_t			i;
+	int		len;
 
+	len = (!n ? 1 : 0);
 	if (n < 0)
-		sign = 1;
-	num = n < 0 ? -n : n;
-	if (num < 10)
+		n *= -1;
+	while (n > 0)
 	{
-		if (!(res = (char *)ft_memalloc(size + 1 + sign)))
-			return (NULL);
-		if (sign)
-			res[0] = '-';
+		len++;
+		n /= 10;
 	}
-	else if (!(res = ft_itoa_rec(num / 10, size + 1, sign)))
-		return (NULL);
-	i = 0;
-	while (res[i])
-		i++;
-	res[i] = num % 10 + '0';
-	return (res);
+	return (len);
 }
 
 char		*ft_itoa(int n)
 {
-	return (ft_itoa_rec(n, 1, 0));
+	char	*res;
+	int		len;
+	char	sign;
+	long	temp;
+
+	temp = n;
+	len = int_len(temp);
+	res = ft_strnew(n < 0 ? len + 1 : len);
+	if (!res)
+		return (NULL);
+	if (!(sign = 0) && n < 0)
+	{
+		temp *= -1;
+		res[0] = '-';
+		sign = 1;
+	}
+	while (len > 0)
+	{
+		res[sign ? len : len - 1] = temp % 10 + '0';
+		temp /= 10;
+		len--;
+	}
+	return (res);
 }

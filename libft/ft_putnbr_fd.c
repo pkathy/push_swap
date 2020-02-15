@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: swynona <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/08 18:50:59 by swynona           #+#    #+#             */
-/*   Updated: 2019/09/08 18:52:55 by swynona          ###   ########.fr       */
+/*   Created: 2019/09/10 17:17:26 by pkathy            #+#    #+#             */
+/*   Updated: 2019/09/10 20:20:31 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	ft_putnbr_fd_rec(unsigned int n, char sign, int fd)
+void	ft_putnbr_fd(int n, int fd)
 {
-	if (n < 10)
+	if (n == -2147483648)
 	{
-		if (sign)
-			ft_putchar_fd('-', fd);
+		write(fd, "-2147483648", 11);
+		return ;
 	}
-	else
-		ft_putnbr_fd_rec(n / 10, sign, fd);
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		n *= -1;
+	}
+	if (n >= 10)
+		ft_putnbr_fd(n / 10, fd);
 	ft_putchar_fd(n % 10 + '0', fd);
-}
-
-void		ft_putnbr_fd(int n, int fd)
-{
-	ft_putnbr_fd_rec(n < 0 ? -n : n, n < 0 ? 1 : 0, fd);
 }
