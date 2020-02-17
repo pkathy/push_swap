@@ -26,7 +26,11 @@ int	sort_median(t_stack *s, int part_size)
 
 int get_median(t_stack *s, int part_size)
 {
+	int ret;
+
 	if (s->size)
 		sort_median(s, part_size);
-	return (!(s->size) ? 0 : s->data[part_size/2]);
+	ret = !(s->size) ? 0 : s->data[part_size/2];
+	free(s->data);
+	return (ret);
 }

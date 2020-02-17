@@ -39,7 +39,7 @@ int get_pivot(t_stacks *s, char stack_name)
 		while (--i >= 0)
 		{
 			if (s->a_parts->size && s->a->data[i] == stack_peek(s->a_parts))
-				break;
+				break ;
 			t_stack_push(&median, s->a->data[i]);
 		}
 	if (stack_name == 'b')
@@ -47,7 +47,7 @@ int get_pivot(t_stacks *s, char stack_name)
 		{
 			t_stack_push(&median, s->b->data[i]);
 			if (s->b_parts->size && s->b->data[i] == stack_peek(s->b_parts))
-				break;
+				break ;
 		}
 	return (get_median(&median, part_size(s, stack_name)));
 }

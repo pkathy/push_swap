@@ -2,7 +2,7 @@
 //temporary for atol
 #include <stdlib.h>
 
-int is_valid(char *str)
+static int is_valid(char *str)
 {
 	int c;
 
@@ -19,7 +19,7 @@ int is_valid(char *str)
 	return (1);
 }
 
-int	is_duplicate(int *arr, int arr_size, int new)
+static int	is_duplicate(int *arr, int arr_size, int new)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ int	is_duplicate(int *arr, int arr_size, int new)
 	return (0);
 }
 
-int	handle_error(int *p)
+static int	handle_error(int *p)
 {
 	free(p);
 	return (0);
@@ -66,6 +66,8 @@ int	stack_resize(t_stack *stack, size_t size)
 {
 	int *tmp;
 
+	if (size == 6)
+		size = 6;
 	if (size <= 0)
 	{
 		if(stack->data)
@@ -76,11 +78,10 @@ int	stack_resize(t_stack *stack, size_t size)
 	}
 	if (!(tmp = ft_memalloc(size * sizeof(int))))
 		return (0);
-	ft_memmove(tmp, stack->data, sizeof(int) * (stack->size > size ? size : stack->size));
+	if (stack->size)
+		ft_memmove(tmp, stack->data, sizeof(int) * (stack->size > size ? size : stack->size));
 	if (stack->data)
-	{
 		free(stack->data);
-	}
 	stack->data = tmp;
 	stack->size = size;
 	return (1);

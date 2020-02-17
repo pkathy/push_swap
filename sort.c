@@ -5,7 +5,7 @@ static int	is_sorted(t_stack *s)
 	size_t	i;
 
 	i = -1;
-	while (++i < s->size - 1)
+	while (s->data && ++i < s->size - 1)
 		if (s->data[i] < s->data[i + 1])
 			return (0);
 	return (1);
