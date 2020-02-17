@@ -39,4 +39,5 @@ int get_pivot(t_stacks *s, char stack_name);
 int find_possible_partition(t_stacks *s, t_data *data, int pivot);
 int is_there_to_push(t_stacks *s, int pivot, char stack);
 int test_sort(t_stacks *s);
+int sort_small(t_stacks *s, int part_size);
 #endif

@@ -17,12 +17,12 @@ int main(int argc, char **argv)
 	t_stack a;
 	t_stack b;
 	char *line;
-
+//handle one ARG error
 	if (argc < 2)
 		return (1);
+	printf("%s ", argv[1]);
 	if (!stack_from_source(&a, ++argv, argc - 1)) {
-		printf("Error\n");
-		free(a.data);
+		write(2, "Error\n", 6);
 		return (0);
 	}
 	stack_from_source(&b, 0, 0);
@@ -37,6 +37,7 @@ int main(int argc, char **argv)
 	else
 		printf("KO\n");
 	free(a.data);
-	free(b.data);
+	if (b.data)
+		free(b.data);
 	return (0);
 }

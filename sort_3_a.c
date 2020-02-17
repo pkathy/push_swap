@@ -49,6 +49,8 @@ int sort_3_a1(t_stacks *s, int as, int *arr)
 
 int sort_3_a(t_stacks *s, int part_size)
 {
+	if (s->a->size <= 3)
+		return (sort_small(s, part_size));
 	if (part_size <= 1)
 		return (0);
 	if (part_size == 2 && stack_peek(s->a) > s->a->data[s->a->size - 2])
