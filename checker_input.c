@@ -17,10 +17,9 @@ int main(int argc, char **argv)
 	t_stack a;
 	t_stack b;
 	char *line;
-//handle one ARG error
+
 	if (argc < 2)
 		return (1);
-	printf("%s ", argv[1]);
 	if (!stack_from_source(&a, ++argv, argc - 1)) {
 		write(2, "Error\n", 6);
 		return (0);
@@ -33,11 +32,12 @@ int main(int argc, char **argv)
 		free(line);
 	}
 	if (is_sorted(&a) && b.size == 0)
-		printf("OK\n");
+		ft_printf("OK\n");
 	else
-		printf("KO\n");
-	free(a.data);
-	if (b.data)
+		ft_printf("KO\n");
+	if (a.data && a.size)
+		free(a.data);
+	if (b.data && a.size)
 		free(b.data);
 	return (0);
 }

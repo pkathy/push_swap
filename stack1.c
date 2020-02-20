@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.c                                            :+:      :+:    :+:   */
+/*   stack1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 19:56:02 by pkathy            #+#    #+#             */
-/*   Updated: 2020/02/20 19:56:03 by pkathy           ###   ########.fr       */
+/*   Created: 2020/02/20 19:45:14 by pkathy            #+#    #+#             */
+/*   Updated: 2020/02/20 19:45:15 by pkathy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,20 @@ static int	handle_error(int *p)
 	return (0);
 }
 
-int			stack_from_source(t_stack *stack, char **source, size_t source_size)
+int			handle_one_arg(t_stack *stack, char *src)
 {
-	long	tmp;
-	int		i;
+	size_t		source_size;
+	int			i;
+	long		tmp;
+	char		**source;
 
-	if ((i = 0) == 0 && !source)
-	{
-		stack->data = 0;
-		stack->size = 0;
-		return (1);
-	}
-	if (source_size == 1)
-		return (handle_one_arg(stack, source[0]));
+	i = 0;
+	if (!init_one_arg(&source, &source_size, src, stack))
+		return (0);
 	if (!(stack->data = ft_memalloc(source_size * sizeof(int))))
 		return (0);
-	stack->size = source_size;
-	while (source_size-- > 0 && source[source_size])
+	ft_memmove(source + 1, source, source_size * sizeof(char *));
+	while ((source[0] = 0) == 0 && source[source_size])
 	{
 		if (!is_valid(source[source_size]))
 			return (handle_error(stack->data));
@@ -70,6 +67,10 @@ int			stack_from_source(t_stack *stack, char **source, size_t source_size)
 		if ((long)tmp != (int)tmp || is_duplicate(stack->data, i, tmp))
 			return (handle_error(stack->data));
 		stack->data[i++] = tmp;
+		free(source[source_size]);
+		source_size--;
 	}
+	free(source[0]);
+	free(source);
 	return (1);
 }

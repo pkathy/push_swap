@@ -1,20 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 19:56:25 by pkathy            #+#    #+#             */
-/*   Updated: 2020/02/20 19:56:26 by pkathy           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
 
-int	part_size(t_stacks *s, char stack_name)
+int part_size(t_stacks *s, char stack_name)
 {
-	int	stop;
+	int stop;
 	int	i;
 
 	if (stack_name == 'a' && !(s->a_parts->size))
@@ -40,10 +28,10 @@ int	part_size(t_stacks *s, char stack_name)
 	return (-1);
 }
 
-int	get_pivot(t_stacks *s, char stack_name)
+int get_pivot(t_stacks *s, char stack_name)
 {
-	int		i;
-	t_stack	median;
+	int i;
+	t_stack median;
 
 	stack_from_source(&median, 0, 0);
 	i = stack_name == 'a' ? s->a->size : s->b->size;
@@ -64,9 +52,9 @@ int	get_pivot(t_stacks *s, char stack_name)
 	return (get_median(&median, part_size(s, stack_name)));
 }
 
-int	find_possible_partition(t_stacks *s, t_data *data, int pivot)
+int find_possible_partition(t_stacks *s, t_data *data, int pivot)
 {
-	int		p_size;
+	int p_size;
 	size_t	i;
 
 	p_size = part_size(s, 'b');
@@ -83,7 +71,7 @@ int	find_possible_partition(t_stacks *s, t_data *data, int pivot)
 	return (-1);
 }
 
-int	is_there_to_push(t_stacks *s, int pivot, char stack)
+int is_there_to_push(t_stacks *s, int pivot, char stack)
 {
 	int		p_size;
 	int		flag;

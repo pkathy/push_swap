@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sort_3_a.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 19:55:35 by pkathy            #+#    #+#             */
-/*   Updated: 2020/02/20 19:55:36 by pkathy           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
 
-int	sort_3_a2(t_stacks *s, int as, int *arr)
+int sort_3_a2(t_stacks *s, int as, int *arr)
 {
 	if (arr[as - 2] < arr[as - 1] && arr[as - 1] < arr[as - 3])
 	{
@@ -33,8 +21,7 @@ int	sort_3_a2(t_stacks *s, int as, int *arr)
 	}
 	return (0);
 }
-
-int	sort_3_a1(t_stacks *s, int as, int *arr)
+int sort_3_a1(t_stacks *s, int as, int *arr)
 {
 	if (arr[as - 3] < arr[as - 2] && arr[as - 2] < arr[as - 1])
 	{
@@ -60,7 +47,7 @@ int	sort_3_a1(t_stacks *s, int as, int *arr)
 	return (0);
 }
 
-int	sort_3_a(t_stacks *s, int part_size)
+int sort_3_a(t_stacks *s, int part_size)
 {
 	if (s->a->size <= 3)
 		return (sort_small(s, part_size));

@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   stack_operations.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 20:21:39 by pkathy            #+#    #+#             */
-/*   Updated: 2020/02/20 20:21:40 by pkathy           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
 
-int		stack_swap(t_stack *s)
+int	stack_swap(t_stack *s)
 {
 	int tmp;
 
@@ -24,7 +12,7 @@ int		stack_swap(t_stack *s)
 	return (1);
 }
 
-int		stack_push(t_stack *from, t_stack *to)
+int	stack_push(t_stack *from, t_stack *to)
 {
 	if (!from)
 		return (0);
@@ -37,6 +25,7 @@ int		stack_push(t_stack *from, t_stack *to)
 		return (0);
 	return (1);
 }
+
 
 void	stack_rotate(t_stack *s, int direction)
 {
@@ -85,7 +74,7 @@ int		operate1(char *operation, t_stack *a, t_stack *b)
 	return (0);
 }
 
-int		operate(char *operation, t_stack *a, t_stack *b, int mode)
+int operate(char *operation, t_stack *a, t_stack *b, int mode)
 {
 	if (!mode)
 		printf("%s\n", operation);
@@ -96,9 +85,9 @@ int		operate(char *operation, t_stack *a, t_stack *b, int mode)
 	else if (ft_strequ("ss", operation))
 		return (stack_swap(b) * stack_swap(a));
 	else if (ft_strequ("pa", operation))
-		return (stack_push(b, a));
+		return(stack_push(b, a));
 	else if ((ft_strequ("pb", operation)))
-		return (stack_push(a, b));
+		return(stack_push(a, b));
 	else if ((ft_strequ("ra", operation)))
 	{
 		stack_rotate(a, 0);

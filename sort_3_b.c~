@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sort_3_b.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 19:55:40 by pkathy            #+#    #+#             */
-/*   Updated: 2020/02/20 19:55:42 by pkathy           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
 
-int		sort_3_b2(t_stacks *s, int bs, int *arr)
+int sort_3_b2(t_stacks *s, int bs, int *arr)
 {
 	if (arr[bs - 1] > arr[bs - 3] && arr[bs - 3] > arr[bs - 2])
 	{
@@ -40,7 +28,7 @@ int		sort_3_b2(t_stacks *s, int bs, int *arr)
 	return (0);
 }
 
-void	sort_3_b1(t_stacks *s, int bs, int *arr)
+void sort_3_b1(t_stacks *s, int bs, int *arr)
 {
 	if (arr[bs - 3] > arr[bs - 2] && arr[bs - 2] > arr[bs - 1])
 	{
@@ -69,7 +57,7 @@ void	sort_3_b1(t_stacks *s, int bs, int *arr)
 		sort_3_b2(s, bs, arr);
 }
 
-int		sort_3_b(t_stacks *s, int part_size)
+int sort_3_b(t_stacks *s, int part_size)
 {
 	if (part_size <= 0)
 		return (0);

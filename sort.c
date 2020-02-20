@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkathy <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/20 19:55:21 by pkathy            #+#    #+#             */
+/*   Updated: 2020/02/20 19:55:23 by pkathy           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static int	is_sorted(t_stack *s)
@@ -11,8 +23,7 @@ static int	is_sorted(t_stack *s)
 	return (1);
 }
 
-
-int is_in_stack(t_stack *s, int k)
+int			is_in_stack(t_stack *s, int k)
 {
 	size_t	i;
 
@@ -23,7 +34,7 @@ int is_in_stack(t_stack *s, int k)
 	return (0);
 }
 
-int handle_part_absence(t_stacks *s, int *a_part_size)
+int			handle_part_absence(t_stacks *s, int *a_part_size)
 {
 	if (((*a_part_size = part_size(s, 'a')) < 0)
 		|| (!is_in_stack(s->b, stack_peek(s->b_parts)) && s->b->size))
@@ -37,11 +48,11 @@ int handle_part_absence(t_stacks *s, int *a_part_size)
 	return (0);
 }
 
-int test_sort(t_stacks *s)
+int			test_sort(t_stacks *s)
 {
-	int a_part_size;
-	int sorted;
-	t_data data;
+	int		a_part_size;
+	int		sorted;
+	t_data	data;
 
 	while (!(sorted = is_sorted(s->a)) || (s->b->size))
 	{

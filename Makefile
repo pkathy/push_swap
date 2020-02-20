@@ -1,11 +1,12 @@
 NAME2 = push_swap
 NAME1 = checker
 LIBFT = ./libft/libft.a
-FILES2 = push_swap.c median.c sort_3_a.c sort_3_b.c divide.c sort.c utils.c
+FILES2 = push_swap.c median.c sort_3_a.c sort_3_b.c divide.c sort.c utils.c\
+push_swap1.c
 
 FILES1 = checker_input.c
 
-FILES3 = stack.c stack_operations.c
+FILES3 = stack.c stack1.c stack_operations.c utils1.c stack2.c
 
 OBJ1 = $(patsubst %.c, %.o, $(FILES1))
 OBJ2 = $(patsubst %.c, %.o, $(FILES2))
